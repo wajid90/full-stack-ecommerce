@@ -1,0 +1,81 @@
+<div class="container mx-auto px-6 py-12">
+    <div class="mb-3 overflow-hidden">
+        <owl-carousel-o [options]="customOptions">
+          <ng-container>
+            <!-- Slide 1 -->
+            <ng-template carouselSlide>
+              <div class="relative w-full h-80">
+                <img src="assets/watchBanner1.jpg" alt="Banner Image" class="carousel-image">
+                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-transparent to-transparent text-white">
+                  <h3 class="text-lg font-semibold">Banner Title</h3>
+                </div>
+              </div>
+            </ng-template>
+      
+            <!-- Slide 2 -->
+            <ng-template carouselSlide>
+              <div class="relative w-full h-80">
+                <img src="assets/watchBanner2.jpg" alt="Banner Image" class="carousel-image">
+                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-transparent to-transparent text-white">
+                  <h3 class="text-lg font-semibold">Banner Title</h3>
+                </div>
+              </div>
+            </ng-template>
+      
+            <!-- Slide 3 -->
+            <ng-template carouselSlide>
+              <div class="relative w-full h-80">
+                <img src="assets/watchBanner3.jpg" alt="Banner Image" class="carousel-image">
+                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-transparent to-transparent text-white">
+                  <h3 class="text-lg font-semibold">Banner Title</h3>
+                </div>
+              </div>
+            </ng-template>
+      
+            <!-- Slide 4 -->
+            <ng-template carouselSlide>
+              <div class="relative w-full h-80">
+                <img src="assets/watchBanner4.jpg" alt="Banner Image" class="carousel-image">
+                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-transparent to-transparent text-white">
+                  <h3 class="text-lg font-semibold">Banner Title</h3>
+                </div>
+              </div>
+            </ng-template>
+      
+            <!-- Slide 5 -->
+            <ng-template carouselSlide>
+              <div class="relative w-full h-80">
+                <img src="assets/watchBanner5.jpg" alt="Banner Image" class="carousel-image">
+                <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-transparent to-transparent text-white">
+                  <h3 class="text-lg font-semibold">Banner Title</h3>
+                </div>
+              </div>
+            </ng-template>
+          </ng-container>
+        </owl-carousel-o>
+      </div>
+      
+      
+   
+    <!-- Featured Products Section -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">Featured Products</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        @for(product of featuredProducts;track $index){
+            <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
+    </section>
+  
+    <!-- New Products Section -->
+    <section>
+      <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">New Arrivals</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        @for(product of newProducts;track $index){
+            <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
+    </section>
+    
+  </div>
+  

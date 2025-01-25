@@ -1,0 +1,106 @@
+<div *ngIf="loading" class="text-center p-4">
+    <span>Loading...</span>
+  </div>
+  
+  <div *ngIf="product" class="max-w-7xl mx-auto p-4">
+    <div class="flex flex-col md:flex-row gap-6">
+    
+        <!-- Thumbnails Section -->
+        <div class="flex gap-4 md:flex-col md:w-1/8">
+          <div 
+            *ngFor="let image of product.images"
+            class="cursor-pointer"
+            (click)="changeImage(image)"
+          >
+            <img 
+              [src]="image" 
+              alt="{{ product.name }}" 
+              class="w-20 h-20 object-cover rounded-lg border-2 border-transparent hover:border-blue-500 transition-all transform hover:scale-105"
+            />
+          </div>
+        </div>
+    
+        <!-- Large Image Section -->
+        <div class="flex-1">
+            <div class="relative">
+              <!-- Ensure the large image has a consistent aspect ratio -->
+              <img 
+                [src]="selectedImage" 
+                alt="{{ product.name }}" 
+                class="w-full h-96 object-cover rounded-lg shadow-lg transition-all transform hover:scale-105"
+              />
+              <!-- Optional Gradient Overlay for aesthetics -->
+              <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black via-transparent to-transparent rounded-lg opacity-40"></div>
+            </div>
+          </div>
+    
+      
+      <div class="flex-1 space-y-4">
+        <h1 class="text-3xl font-bold text-gray-900">{{ product.name }}</h1>
+        <p class="text-xl text-gray-600">{{ product.shortDesription }}</p>
+
+        <div class="flex items-center gap-2 text-xl font-semibold">
+          <span class="text-green-500">${{ product.price - (product.price * product.discount) / 100 }}</span>
+          <span class="text-red-500 line-through">${{ product.price }}</span>
+          <span class="text-green-500 font-semibold">{{ product.discount }}% Off</span>
+        </div>
+      
+        <div class="mt-8 flex gap-4">
+          <button 
+          *ngIf="product" 
+          (click)="addToCartOrRemove(product)" 
+          mat-fab
+          color="primary"
+        >
+        <mat-icon
+        [ngClass]="{
+        'text-white': isProductInCart(product),
+        'text-black': !isProductInCart(product)
+        }"
+        >
+        {{ isProductInCart(product) ? 'remove_shopping_cart' : 'add_shopping_cart' }}
+        </mat-icon>
+        </button>
+            <button 
+            *ngIf="product._id" 
+            (click)="addToWishList(product)" 
+            
+           class="w-full flex justify-center bg-gray-200 gap-2 rounded-lg items-center"
+          >
+          @if(isInWishList(product)){
+            <span class="material-icons">favorite</span> 
+            <span class="mt-1"> Add To Wishlist</span>
+          }@else{
+            <span class="material-icons">favorite_border</span>
+             <span class="mt-1"> Add To Wishlist</span>
+          }
+
+  
+ 
+          </button>
+           
+          </div>
+        <div class="mt-6 space-y-4">
+          <h3 class="text-lg font-semibold text-gray-800">Product Details</h3>
+          <p class="text-gray-600">{{ product.description }}</p>
+        </div>
+  
+        <!-- Product Featured and New Tags -->
+        <!-- <div class="flex gap-4">
+          <span *ngIf="product.isFeatured" class="bg-yellow-300 text-gray-800 py-1 px-3 rounded-md">Featured</span>
+          <span *ngIf="product.isNew" class="bg-green-300 text-gray-800 py-1 px-3 rounded-md">New</span>
+        </div> -->
+      </div>
+    </div>
+  
+    <div class="mt-12">
+      <h2 class="text-2xl font-semibold text-gray-800">Similar Products</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        @for(product of similarProducts;track $index){
+            <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
+     
+    </div>
+  </div>
+  

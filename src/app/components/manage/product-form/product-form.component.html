@@ -1,0 +1,104 @@
+<div class="flex flex-col items-center px-40 mt-10">
+    <div>
+     @if(isEdit)
+     {
+         <h1>Update Product</h1>
+     }
+     @else{
+         <h1>Add Product</h1>
+     }
+     
+    </div>
+     <form action="" class="shadow-sm  p-4" [formGroup]="productForm">
+       <div class="flex flex-wrap items-center">
+        <div class="w-full gap-4">
+            <mat-form-field class="w-full">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="categoryId" multiple>
+                   @for (cat of categories; track $index) {
+                    <mat-option [value]="cat._id">{{cat.name}}</mat-option>
+                  } 
+                </mat-select>
+              </mat-form-field>
+          </div>
+          <div class="w-full gap-4">
+            <mat-form-field class="w-full">
+                <mat-label>Brand</mat-label>
+                <mat-select formControlName="brandId" multiple>
+                   @for (brand of brands; track $index) {
+                    <mat-option [value]="brand._id">{{brand.name}}</mat-option>
+                  } 
+                </mat-select>
+              </mat-form-field>
+          </div>
+         <div class="w-full gap-4">
+           <mat-form-field class="w-full">
+             <mat-label>Name</mat-label>
+             <input matInput type="text" formControlName="name" />
+           </mat-form-field>
+         </div>
+         <div class="w-full gap-4">
+            <mat-form-field class="w-full">
+              <mat-label>Short Desription</mat-label>
+              <textarea rows="5" matInput type="text" formControlName="shortDesription" ></textarea>
+            </mat-form-field>
+          </div>
+          <div class="w-full gap-4">
+            <mat-form-field class="w-full">
+              <mat-label>Description</mat-label>
+              <textarea rows="5" matInput type="text"  formControlName="description" ></textarea>
+            </mat-form-field>
+          </div>
+          <div class="w-full gap-4">
+            <mat-form-field class="w-full">
+              <mat-label>Price</mat-label>
+              <input matInput type="number" formControlName="price"  />
+            </mat-form-field>
+          </div>
+          <div class="w-full gap-4">
+            <mat-form-field class="w-full">
+              <mat-label>Discount</mat-label>
+              <input matInput type="number" formControlName="discount" />
+            </mat-form-field>
+          </div>
+          <div class="w-full gap-8">
+            <mat-checkbox formControlName="isFeatured">isFeatured</mat-checkbox>
+            <mat-checkbox formControlName="isNew">isNew</mat-checkbox>
+          </div>
+
+          <div class="w-full flex flex-col" formArrayName="images">
+            <div class="flex justify-between">
+                <h4>Images</h4>
+                <div>
+                    <button mat-raised-button color="primary" (click)="addImage()">
+                        Add Image
+                     </button>
+                     <button mat-raised-button color="" (click)="removeImage()">
+                        Remove
+                     </button>
+                </div>
+            </div>
+            @for(item of images.controls;track $index){
+                <mat-form-field class="w-full">
+                    <mat-label>Image {{$index+1}}</mat-label>
+                    <input matInput type="text"  [formControlName]="$index"/>
+                  </mat-form-field>
+            } 
+          </div>
+           <div class="w-full flex justify-center">
+                 @if(isEdit)
+                 {
+                     <button mat-raised-button color="primary" (click)="update()" >
+                        Update
+                     </button>
+                 }
+                 @else{
+                     <button mat-raised-button color="primary" (click)="add()" >
+                         Add
+                     </button>
+                 }
+           
+           </div>
+       </div>
+     </form>
+ </div>

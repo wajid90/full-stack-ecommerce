@@ -1,0 +1,48 @@
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">My Wish List</h1>
+  
+    <div *ngIf="wishList.length === 0" class="text-center text-gray-600">
+      <p class="text-lg">Your wish list is empty.</p>
+    </div>
+  
+    <div
+      *ngFor="let item of wishList"
+      class="flex flex-col md:flex-row items-center bg-white shadow-md rounded-lg p-4 mb-4"
+    >
+      <!-- Product Image -->
+      <div class="w-32 h-32 flex-shrink-0">
+        <img
+          [src]="item.productId.images[0]"
+          alt="{{ item.productId.name }}"
+          class="w-full h-full object-cover rounded-md"
+        />
+      </div>
+  
+      <!-- Product Details -->
+      <div class="flex-grow ml-4">
+        <h2 class="text-xl font-semibold text-gray-800">{{ item.productId.name }}</h2>
+        <p class="text-gray-600 text-sm mt-2">{{ item.productId.shortDesription }}</p>
+        <div class="text-gray-900 font-semibold mt-2">
+          ₹{{ item.productId.price }}
+        </div>
+        <div class="text-sm text-gray-500 mt-1">Discount: {{ item.productId.discount }}%</div>
+      </div>
+  
+      <!-- Actions -->
+      <div class="mt-4 md:mt-0 md:ml-4 flex space-x-2">
+        <button
+         *ngIf="item.productId._id"
+          class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-200"
+          (click)="removeFromWishList(item.productId._id)"
+        >
+          Remove
+        </button>
+        <button
+          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+        >
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+  

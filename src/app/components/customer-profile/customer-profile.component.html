@@ -1,0 +1,44 @@
+<div class="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
+      <!-- Profile Image -->
+      <div class="text-center">
+        <img
+          src="assets/profile.jpg"
+          alt="Profile Picture"
+          class="w-24 h-24 mx-auto rounded-full shadow-md border-4 border-gray-300"
+        />
+        <h2 class="text-2xl font-semibold text-gray-800 mt-4">{{ authService.userName }}</h2>
+        <p class="text-sm text-gray-600">{{ authService.userEmail }}</p>
+      </div>
+  
+      <!-- Buttons -->
+      <div class="mt-6">
+        <button
+          class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition"
+        >
+          Edit Profile
+        </button>
+      </div>
+      <div class="mt-6 grid grid-cols-2 gap-4">
+        <button
+          class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded transition"
+        >
+          My Orders
+        </button>
+        <button
+          class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded transition"
+        >
+          Settings
+        </button>
+      </div>
+      <div class="mt-6">
+        <button
+        (click)="logout()"
+          class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition"
+        >
+          Log Out
+        </button>
+      </div>
+    </div>
+  </div>
+  
