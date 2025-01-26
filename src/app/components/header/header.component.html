@@ -1,142 +1,137 @@
-<!-- Top Header -->
-<header class="shadow-md sticky top-0  bg-gray-900 text-gray-300">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 ">
-      <!-- Top Section -->
-      <div class="flex justify-between items-center py-4">
-        <!-- Logo -->
-        <a href="#" class="flex items-center">
-          <img 
-            src="assets/watchlogo.png" 
-            alt="TimeLux Logo" 
-            class="h-12 w-auto" 
+<header class="shadow-md sticky top-0 bg-gray-900 text-gray-300">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Top Section -->
+    <div class="flex justify-between items-center py-4">
+      <!-- Logo -->
+      <a [routerLink]="'/'" class="flex items-center">
+        <img src="assets/watchlogo.png" alt="TimeLux Logo" class="h-12 w-auto" />
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex space-x-6">
+        <a [routerLink]="'/'" class="text-gray-300 hover:text-blue-600">Home</a>
+        <a [routerLink]="'/products'" class="text-gray-300 hover:text-blue-600">Our Store</a>
+        <a href="#" class="text-gray-300 hover:text-blue-600">Collections</a>
+        <a href="#" class="text-gray-300 hover:text-blue-600">Contact Us</a>
+      </nav>
+
+      <!-- Search and Actions -->
+      <div class="flex items-center space-x-4">
+        <!-- Search Bar -->
+        <div class="hidden sm:flex items-center bg-gray-100 px-5 py-2 rounded-md">
+          <input
+            type="text"
+            placeholder="Search watches..."
+            (keyup.enter)="onSearch($event)"
+            class="bg-transparent outline-none text-sm text-gray-700"
           />
-        </a>
-  
-        <!-- Navigation Links -->
-        <nav class="hidden md:flex space-x-6">
-          <a [routerLink]="'/'" class="text-gray-300 hover:text-blue-600">Home</a>
-          <a [routerLink]="'/products'" class="text-gray-300 hover:text-blue-600">Our Store</a>
-          <a href="#" class="text-gray-300 hover:text-blue-600">Collections</a>
-          <a href="#" class="text-gray-300 hover:text-blue-600">Contact Us</a>
-        </nav>
-  
-        <!-- Search and Actions -->
-        <div class="flex items-center space-x-4">
-          <!-- Search Bar -->
-          <div class="hidden sm:flex items-center bg-gray-100 px-5 py-2 rounded-md">
-            <input
-              type="text"
-              placeholder="Search watches..."
-              (keyup.enter)="onSearch($event)"
-              class="bg-transparent outline-none text-sm text-gray-700"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-500"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12.9 14.32a8 8 0 111.414-1.414l4.243 4.243a1 1 0 01-1.414 1.414l-4.243-4.243zM8 14a6 6 0 100-12 6 6 0 000 12z"
+              clip-rule="evenodd"
             />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-gray-500"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M12.9 14.32a8 8 0 111.414-1.414l4.243 4.243a1 1 0 01-1.414 1.414l-4.243-4.243zM8 14a6 6 0 100-12 6 6 0 000 12z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-  
-          @if(authService.isAdmin){
-            <a
-              [routerLink]="'/admin/dashboard'"
-                class="text-sm font-medium cursor-pointer text-blue-600 hover:text-blue-700 px-4 py-2 border border-blue-600 rounded-md"
-              >
-                DashBoard
-              </a>
-        }
-        @else{
-            
+          </svg>
+        </div>
+
+        <!-- User Actions -->
+        <ng-container *ngIf="authService.isLoggedIn">
+         
           <a
-          [routerLink]="'/profile'"
-            class="text-sm font-medium cursor-pointer text-white  px-4 py-2"
+            [routerLink]="'/profile'"
+            class="text-sm font-medium cursor-pointer text-white px-4 py-2"
           >
-            {{authService.userName ?? ""}}
+            {{ authService.userName ?? "" }}
           </a>
-        }
-        @if(authService.isLoggedIn){
+       
+          <ng-container *ngIf="!authService.isAdmin">
           <button
-           mat-fab
-            color="warn"
-          [routerLink]="'/wishlists'"
-          class="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-lg hover:bg-white transition duration-200"
+            mat-icon-button
+            [routerLink]="'/wishlists'"
+            class="text-white"
           >
-          <span class="material-icons text-red-500">favorite</span>
+            <mat-icon>favorite</mat-icon>
           </button>
+        </ng-container>
+          <ng-container *ngIf="!authService.isAdmin">
           <button
-          mat-fab
-           color="warn"
-         [routerLink]="'/cart'"
-         class="flex items-center gap-2 bg-gray-100 text-black px-4 py-2 rounded-lg hover:bg-gray-100 transition duration-200"
-         >
-         <span class="material-icons text-black">add_shopping_cart</span>
-         </button>
+            mat-icon-button
+            [routerLink]="'/cart'"
+            class="text-white"
+          >
+            <mat-icon>shopping_cart</mat-icon>
+          </button>
+        </ng-container>
+          <ng-container *ngIf="!authService.isAdmin">
+          <a
+            [routerLink]="'/orders'"
+            class="text-sm font-medium cursor-pointer text-white px-4 py-2"
+          >
+            Orders
+          </a>
+        </ng-container>
+          <ng-container>
+            <a
+              href="/admin/dashboard"
+              class="text-sm font-medium cursor-pointer text-white bg-blue-400 hover:bg-blue-300 px-4 py-2 rounded-md"
+            >
+              Dashboard
+            </a>
+          </ng-container>
           <a
             (click)="logout()"
             class="text-sm font-medium cursor-pointer text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md"
           >
             Logout
           </a>
-  
-          }
-          @else{
-            <a
+       
+        </ng-container>
+        <ng-container *ngIf="!authService.isLoggedIn">
+          <a
             [routerLink]="'/login'"
             class="text-sm font-medium cursor-pointer text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md"
           >
             Sign In
           </a>
+        </ng-container>
 
-  
-          }
-        
-          <!-- Mobile Menu Button -->
-          <button class="md:hidden text-gray-500 hover:text-gray-700">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16m-7 6h7"
-              />
-            </svg>
-          </button>
-        </div>
+        <!-- Mobile Menu Button -->
+        <button class="md:hidden text-gray-500 hover:text-gray-700">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
+          </svg>
+        </button>
       </div>
-  
-      <!-- Bottom Header -->
-      
     </div>
+
+    <!-- Bottom Header -->
     <div class="w-full bg-gray-800 py-1">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-          <ul class="flex flex-wrap items-center space-x-4 overflow-x-auto py-2">
-            <!-- Category List Loop -->
-            @for(category of categoryList;track $index) {
-             @if($index < 7){
-              <li
-               (click)="SearchCategory(category._id)"
-              >
-                <a class="text-gray-200 cursor-pointer hover:text-blue-600 font-medium transition-colors duration-300 text-sm sm:text-base lg:text-xs">
-                    {{category.name}}
-                  </a>
-              </li>
-            }
-            }
-          </ul>
-        </nav>
-      </div>
-  </header>
-  
+      <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <ul class="flex flex-wrap items-center space-x-4 overflow-x-auto py-2">
+          <!-- Category List Loop -->
+          <li *ngFor="let category of categoryList; let i = index" (click)="SearchCategory(category._id)">
+            <a class="text-gray-200 cursor-pointer hover:text-blue-600 font-medium transition-colors duration-300 text-sm sm:text-base lg:text-xs">
+              {{ category.name }}
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>

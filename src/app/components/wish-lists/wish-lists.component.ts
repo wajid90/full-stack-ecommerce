@@ -1,22 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Product, WishListItem } from '../../Types/product';
 import { WishListService } from '../../services/wish-list.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-wish-lists',
   standalone: true,
-  imports: [MatIconModule,CommonModule],
+  imports: [MatIconModule,CommonModule,MatSnackBarModule],
   templateUrl: './wish-lists.component.html',
   styleUrl: './wish-lists.component.scss'
 })
 export class WishListsComponent {
-  wishList: WishListItem[] = [];  // Change the type to WishListItem[]
-
+  wishList: WishListItem[] = []; 
+ authService=inject(AuthService);
+ snackBar=inject(MatSnackBar);
   constructor(private wishListService: WishListService) {}
 
   ngOnInit(): void {
+    if (!this.authService.isLoggedIn) {
+      this.snackBar.open('Please log in to view products.', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
     this.loadWishList();
   }
 
@@ -27,6 +36,12 @@ export class WishListsComponent {
   }
 
   removeFromWishList(productId: string) {
+    if (!this.authService.isLoggedIn) {
+      this.snackBar.open('Please log in to view products.', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
     this.wishListService.removeFromWishList(productId).subscribe(() => {
       this.wishList = this.wishList.filter((item) => item.productId._id !== productId);
     });

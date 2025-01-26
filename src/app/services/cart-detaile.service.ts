@@ -36,7 +36,7 @@ export class CartDetaileService {
             } as CartItem;
           });
         } else {
-          console.error('No products found in response.');
+          
           return [];
         }
       })
@@ -45,17 +45,17 @@ export class CartDetaileService {
         this.items = cartItems;
       },
       (error) => {
-        console.error('Error fetching cart items:', error);
+        this.items = [];
       }
     );
   }
   getCartItems(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}`).pipe(
       map((response: any) => {
+     
         return response;
       }),
       catchError((error) => {
-        console.error('Error in getCartItems:', error);
         return of([]); 
       })
     );
@@ -70,5 +70,8 @@ export class CartDetaileService {
   }
   addToCart(productId: string, quantity: number = 1): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/add`, { productId, quantity });
+  }
+  cleanCart(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/clear`);
   }
 }

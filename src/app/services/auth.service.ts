@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,16 +9,13 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   http=inject(HttpClient);
   constructor() { }
-  login(email:string,password:string){
-    return this.http.post(environment.apiUrl+"/auth/login",{
-      email,
-      password
-    })
+  login(email: string, password: string): Observable<any> {
+    return this.http.post<any>(environment.apiUrl+"/auth/login", { email, password });
   }
-  logout(){
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
+  logout(): void {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
   }
   register(name:string,email:string,password:string){
     return this.http.post(environment.apiUrl+"/auth/register",{
@@ -27,7 +25,7 @@ export class AuthService {
     })
   }
   get isLoggedIn(){
-    let token=localStorage.getItem("token");
+    let token=localStorage.getItem("accessToken");
     if(token && token!==undefined && token!==null){
       return true;
     }
@@ -53,5 +51,8 @@ export class AuthService {
       return JSON.parse(userData).email;
     }
     return null;
+  }
+  refreshToken(token: string): Observable<any> {
+    return this.http.post<any>(environment.apiUrl+"/auth/refresh-token", { token });
   }
 }

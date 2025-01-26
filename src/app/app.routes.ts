@@ -16,7 +16,8 @@ import { adminGaurd } from './core/admin-guard';
 import { CustomerProfileComponent } from './components/customer-profile/customer-profile.component';
 import { WishListsComponent } from './components/wish-lists/wish-lists.component';
 import { CartDetaileComponent } from './components/cart-detaile/cart-detaile.component';
-
+import { OrdersComponent as AdminOrderComponent } from './components/manage/orders/orders.component';
+import { OrdersComponent } from './components/orders/orders.component';
 
 export const routes: Routes = [
     {
@@ -36,7 +37,12 @@ export const routes: Routes = [
     },
     {
         path:"admin/categories/:id",
-        component:CategoryFormComponent,
+        component:AdminOrderComponent,
+        canActivate:[adminGaurd]
+    },
+    {
+        path:"admin/orders",
+        component:AdminOrderComponent,
         canActivate:[adminGaurd]
     },
     {
@@ -82,9 +88,15 @@ export const routes: Routes = [
         path:"products/:id",
         component:ProductDetailComponent,
         canActivate:[authGaurd]
-    },    {
+    },    
+    {
         path:"wishlists",
         component:WishListsComponent,
+        canActivate:[authGaurd]
+    },    
+    {
+        path:"orders",
+        component:OrdersComponent,
         canActivate:[authGaurd]
     },
     {

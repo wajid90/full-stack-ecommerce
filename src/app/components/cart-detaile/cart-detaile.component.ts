@@ -8,6 +8,7 @@ import { map } from 'rxjs';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 declare var Razorpay: any;
 
@@ -26,7 +27,8 @@ export class CartDetaileComponent {
   cartService=inject(CartDetaileService);
   customerService=inject(CustomerService);
   orderService=inject(OrderService);
-  userService=inject(AuthService);
+  authService = inject(AuthService);
+  snackBar = inject(MatSnackBar);
   paymentMethod: string = 'cash';
   shippingForm = this.formBuilder.group({
     fullName: ['', Validators.required],
@@ -44,64 +46,96 @@ export class CartDetaileComponent {
   });
 
   ngOnInit(): void {
-    this.loadCartItems();
+    if (!this.authService.isLoggedIn) {
+      this.snackBar.open('Please log in to view products.', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
+      this.loadCartItems();
+   
   }
 
   loadCartItems(): void {
     this.cartService.getCartItems().pipe(
-         map((result: any) => {
-           if (result && result.products) {
-             return result.products.map((item: any) => {
-               return {
-                 product: {
-                   _id: item.productId._id,
-                   name: item.productId.name,
-                   shortDescription: item.productId.shortDesription,  
-                   description: item.productId.description,
-                   price: item.productId.price,
-                   discount: item.productId.discount,
-                   images: item.productId.images,
-                   categoryId: item.productId.categoryId,
-                   brandId: item.productId.brandId,
-                   isFeatured: item.productId.isFeatured,
-                   isNew: item.productId.isNew
-                 },
-                 quantity: item.quantity
-               } as CartItem;
-             });
-           } else {
-             console.error('No products found in response.');
-             return [];
-           }
-         })
-       ).subscribe(
-         (cartItems: CartItem[]) => {
-           this.cartItems = cartItems;
-         },
-         (error) => {
-           console.error('Error fetching cart items:', error);
-         }
-       );
+      map((result: any) => {
+        if (result && result.products) {
+          return result.products.map((item: any) => {
+            return {
+              product: {
+                _id: item.productId._id,
+                name: item.productId.name,
+                shortDescription: item.productId.shortDesription,
+                description: item.productId.description,
+                price: item.productId.price,
+                discount: item.productId.discount,
+                images: item.productId.images,
+                categoryId: item.productId.categoryId,
+                brandId: item.productId.brandId,
+                isFeatured: item.productId.isFeatured,
+                isNew: item.productId.isNew
+              },
+              quantity: item.quantity
+            } as CartItem;
+          });
+        } else {
+          this.snackBar.open('No products found in cart.', 'Close', {
+            duration: 3000,
+          });
+          return [];
+        }
+      })
+    ).subscribe(
+      (cartItems: CartItem[]) => {
+        this.cartItems = cartItems;
+      },
+      (error) => {
+        // this.snackBar.open('Error fetching cart items: ' + error.message, 'Close', {
+        //   duration: 3000,
+        // });
+      }
+    );
   }
 
   updateQuantity(productId: string, newQuantity: number): void {
     if (newQuantity < 1) return;
 
-    this.cartService.updateCartItem(productId, newQuantity).subscribe(() => {
-      const item = this.cartItems.find((item) => item.product._id === productId);
-      if (item) {
-        item.quantity = newQuantity;
+    this.cartService.updateCartItem(productId, newQuantity).subscribe({
+      next: () => {
+        const item = this.cartItems.find((item) => item.product._id === productId);
+        if (item) {
+          item.quantity = newQuantity;
+        }
+      },
+      error: (error) => {
+        // this.snackBar.open('Error updating quantity: ' + error.message, 'Close', {
+        //   duration: 3000,
+        // });
       }
     });
   }
 
   removeFromCart(productId: string): void {
-    this.cartService.removeCartItem(productId).subscribe(() => {
-      this.cartItems = this.cartItems.filter((item) => item.product._id !== productId);
+    if (!this.authService.isLoggedIn) {
+      this.snackBar.open('Please log in to remove cart.', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
+    this.cartService.removeCartItem(productId).subscribe({
+      next: () => {
+        this.cartItems = this.cartItems.filter((item) => item.product._id !== productId);
+      },
+      error: (error) => {
+        this.snackBar.open('Error removing item from cart: ' + error.message, 'Close', {
+          duration: 3000,
+        });
+      }
     });
   }
 
   calculateTotal(): number {
+    
     return this.cartItems.reduce(
       (total, item) => total + item.product.price * item.quantity,
       0
@@ -109,36 +143,48 @@ export class CartDetaileComponent {
   }
 
   proceedToCheckout(): void {
-    this.checkOut=1;
+    this.checkOut = 1;
   }
+
   submitShippingDetails() {
+    if (!this.authService.isLoggedIn) {
+      this.snackBar.open('Please log in to view products.', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
     if (this.shippingForm.valid) {
       this.checkOut = 2;
     } else {
       this.shippingForm.markAllAsTouched();
-      console.error('Form is invalid');
+      this.snackBar.open('Please fill in all required fields.', 'Close', {
+        duration: 3000,
+      });
     }
   }
+
   submitPaymentDetails() {
     if (this.paymentForm.valid) {
       this.initiateRazorpayPayment();
     } else {
       this.paymentForm.markAllAsTouched();
-      console.error('Form is invalid');
+      this.snackBar.open('Please fill in all required fields.', 'Close', {
+        duration: 3000,
+      });
     }
   }
+
   initiateRazorpayPayment() {
     const options = {
-      key: 'YOUR_RAZORPAY_KEY_ID', 
-      amount: this.calculateTotal() * 100, 
+      key: 'YOUR_RAZORPAY_KEY_ID',
+      amount: this.calculateTotal() * 100,
       currency: 'INR',
       name: 'Ecommerce App',
       description: 'Test Transaction',
       image: 'https://example.com/your_logo',
-      order_id: '', 
+      order_id: '',
       handler: (response: any) => {
         console.log('Payment successful', response);
-      
       },
       prefill: {
         name: this.shippingForm.get('fullName')?.value,
@@ -151,41 +197,39 @@ export class CartDetaileComponent {
       theme: {
         color: '#3399cc'
       },
-      modal:{
-        ondismiss: function(){
+      modal: {
+        ondismiss: function () {
           console.log('Payment cancelled');
         }
       }
     };
-    const successCallback = (response: any) => {
-      console.log('Payment successful', response);
-     
-    };
-    const failCallback = (response: any) => {
-      console.log('Payment failed', response.error.description);
-    }
-    const cancelCallback = (response: any) => {
-      console.log('Payment cancelled', response.error.description);
-    };
 
-    const rzp1 = new Razorpay(options,successCallback,failCallback,cancelCallback);
+    const rzp1 = new Razorpay(options);
     rzp1.open();
   }
-  
-  submitCashPayment() {
-   let order={
-    items:this.cartItems,
-    paymentType:'cash',
-    address:this.shippingForm.value,
-    date:new Date(),
-    totalAmmount:this.calculateTotal()
-   }
-   this.customerService.createOrder(order).subscribe((response:any) => {
 
-    alert('Order placed successfully!');
-    this.cartItems = [];
-    this.checkOut = 0;
-    
-   });
+  submitCashPayment() {
+    let order = {
+      items: this.cartItems,
+      paymentType: 'cash',
+      address: this.shippingForm.value,
+      date: new Date(),
+      totalAmmount: this.calculateTotal()
+    };
+
+    this.customerService.createOrder(order).subscribe({
+      next: (response: any) => {
+        this.snackBar.open('Order placed successfully!', 'Close', {
+          duration: 3000,
+        });
+        this.cartItems = [];
+        this.checkOut = 0;
+      },
+      error: (error) => {
+        this.snackBar.open('Error placing order: ' + error.message, 'Close', {
+          duration: 3000,
+        });
+      }
+    });
   }
 }

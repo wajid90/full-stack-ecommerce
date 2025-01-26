@@ -1,0 +1,66 @@
+<div class="container px-10">
+    
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Manage Orders</h2>
+    <div class="mb-4">
+     
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Filter orders">
+      </mat-form-field>
+    </div>
+    <mat-table [dataSource]="dataSource" matSort >
+      <!-- Order ID Column -->
+      <ng-container matColumnDef="orderId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Order ID </mat-header-cell>
+        <mat-cell *matCellDef="let order"> {{ order._id }} </mat-cell>
+      </ng-container>
+  
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
+        <mat-cell *matCellDef="let order"> {{ order.date | date:'medium' }} </mat-cell>
+      </ng-container>
+  
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+        <mat-cell *matCellDef="let order">
+          <mat-form-field appearance="fill">
+            <mat-label>Status</mat-label>
+            <mat-select [(value)]="order.status" (selectionChange)="updateOrderStatus(order._id, $event.value)">
+              <mat-option value="Pending">Pending</mat-option>
+              <mat-option value="Processing">Processing</mat-option>
+              <mat-option value="Shipped">Shipped</mat-option>
+              <mat-option value="Delivered">Delivered</mat-option>
+              <mat-option value="Cancelled">Cancelled</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+  
+      <!-- Payment Type Column -->
+      <ng-container matColumnDef="paymentType">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Payment Type </mat-header-cell>
+        <mat-cell *matCellDef="let order"> {{ order.paymentType }} </mat-cell>
+      </ng-container>
+  
+      <!-- Total Amount Column -->
+      <ng-container matColumnDef="totalAmount">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Total Amount </mat-header-cell>
+        <mat-cell *matCellDef="let order"> ₹{{ order.totalAmmount | number }} </mat-cell>
+      </ng-container>
+  
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let order">
+          <button mat-button (click)="viewOrder(order._id)">View</button>
+          <button mat-button color="warn" (click)="deleteOrder(order._id)">Delete</button>
+        </mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>

@@ -1,68 +1,44 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-2xl font-bold text-gray-800 text-center">Register</h2>
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
-        
-        <!-- Name Field -->
-        <div>
-          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-          <input
-            type="text"
-            id="name"
-            formControlName="name"
-            class="mt-1 w-full border-gray-100 focus:border-gray-100 p-2 border-none bg-gray-100 rounded-md shadow-sm  sm:text-sm"
-            placeholder="Enter your name"
-          />
-          <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="text-red-500 text-sm mt-1">
-            Name must be at least 3 characters long.
-          </div>
-        </div>
-  
-        <!-- Email Field -->
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-          <input
-            type="email"
-            id="email"
-            formControlName="email"
-            class="mt-1 w-full border-gray-100 focus:border-gray-100 p-2 border-none bg-gray-100 rounded-md shadow-sm  sm:text-sm"
-            placeholder="Enter your email"
-          />
-          <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="text-red-500 text-sm mt-1">
-            Please enter a valid email.
-          </div>
-        </div>
-  
-        <!-- Password Field -->
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-          <input
-            type="password"
-            id="password"
-            formControlName="password"
-            class="mt-1 w-full border-gray-100 focus:border-gray-100 p-2 border-none bg-gray-100 rounded-md shadow-sm  sm:text-sm"
-            placeholder="Enter your password"
-          />
-          <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="text-red-500 text-sm mt-1">
-            Password must be at least 6 characters long.
-          </div>
-        </div>
-  
-        <!-- Submit Button -->
-        <div>
-          <button
-            type="submit"
-            [disabled]="registerForm.invalid"
-            class="w-full cursor-pointer bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            Register
-          </button>
-        </div>
-      </form>
-      <p class="my-4 text-gray-600">
-        Already have an account? 
-        <a [routerLink]="'/login'" class="text-blue-600 hover:underline">Login</a>
-      </p>
-    </div>
+  <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-2xl font-bold text-gray-800 text-center">Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Name Field -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" placeholder="Enter your name" required>
+        <mat-error *ngIf="registerForm.get('name')?.hasError('required')">Name is required</mat-error>
+        <mat-error *ngIf="registerForm.get('name')?.hasError('minlength')">Name must be at least 3 characters long</mat-error>
+      </mat-form-field>
+
+      <!-- Email Field -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Enter your email" required>
+        <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Email is required</mat-error>
+        <mat-error *ngIf="registerForm.get('email')?.hasError('email')">Invalid email address</mat-error>
+      </mat-form-field>
+
+      <!-- Password Field -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" placeholder="Enter your password" required>
+        <mat-error *ngIf="registerForm.get('password')?.hasError('required')">Password is required</mat-error>
+        <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">Password must be at least 6 characters long</mat-error>
+      </mat-form-field>
+
+      <!-- Confirm Password Field -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm your password" required>
+        <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">Confirm Password is required</mat-error>
+        <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('mismatch')">Passwords must match</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" class="w-full">Register</button>
+    </form>
+    <p class="my-4  text-gray-600">
+      if you have an account? 
+      <a [routerLink]="'/login'" class="text-blue-600 hover:underline">Login</a>
+    </p>
   </div>
-  
+</div>

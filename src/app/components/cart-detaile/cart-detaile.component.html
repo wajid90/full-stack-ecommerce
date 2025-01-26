@@ -1,8 +1,7 @@
 <div class="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <!-- Cart Header -->
+  <ng-container *ngIf="checkOut === 0">
     <h2 class="text-3xl font-bold text-gray-800 mb-6">Your Cart</h2>
   
-    <!-- Empty Cart Message -->
     <div *ngIf="cartItems.length === 0" class="text-center py-16">
       <p class="text-lg text-gray-600">Your cart is empty</p>
       <a
@@ -13,7 +12,6 @@
       </a>
     </div>
   
-    <!-- Cart Items -->
     <div *ngIf="cartItems.length > 0" class="space-y-6">
       <div
         *ngFor="let item of cartItems"
@@ -68,7 +66,6 @@
       </div>
     </div>
   
-    <!-- Cart Summary -->
     <div class="mt-8 border-t pt-6">
       <div class="flex justify-between items-center">
         <h3 class="text-lg font-semibold text-gray-800">Total:</h3>
@@ -81,5 +78,77 @@
         Proceed to Checkout
       </button>
     </div>
-  </div>
+  </ng-container>
   
+  <ng-container *ngIf="checkOut === 1">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Shipping Address</h2>
+    <form [formGroup]="shippingForm" (ngSubmit)="submitShippingDetails()">
+      <div class="mb-4">
+        <label class="block text-gray-700">Full Name</label>
+        <input type="text" class="w-full px-4 py-2 border rounded-lg" formControlName="fullName">
+        <div *ngIf="shippingForm.get('fullName')!.invalid && shippingForm.get('fullName')!.touched" class="text-red-500">
+          Full Name is required
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700">Email</label>
+        <input type="email" class="w-full px-4 py-2 border rounded-lg" formControlName="email">
+        <div *ngIf="shippingForm.get('email')!.invalid && shippingForm.get('email')!.touched" class="text-red-500">
+          Email is required
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700">Mobile Number</label>
+        <input type="tel" class="w-full px-4 py-2 border rounded-lg" formControlName="phone">
+        <div *ngIf="shippingForm.get('phone')!.invalid && shippingForm.get('phone')!.touched" class="text-red-500">
+          Mobile Number is required
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700">Address</label>
+        <input type="text" class="w-full px-4 py-2 border rounded-lg" formControlName="address">
+        <div *ngIf="shippingForm.get('address')!.invalid && shippingForm.get('address')!.touched" class="text-red-500">
+          Address is required
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700">City</label>
+        <input type="text" class="w-full px-4 py-2 border rounded-lg" formControlName="city">
+        <div *ngIf="shippingForm.get('city')!.invalid && shippingForm.get('city')!.touched" class="text-red-500">
+          City is required
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700">Postal Code</label>
+        <input type="text" class="w-full px-4 py-2 border rounded-lg" formControlName="postalCode">
+        <div *ngIf="shippingForm.get('postalCode')!.invalid && shippingForm.get('postalCode')!.touched" class="text-red-500">
+          Postal Code is required
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700">Country</label>
+        <input type="text" class="w-full px-4 py-2 border rounded-lg" formControlName="country">
+        <div *ngIf="shippingForm.get('country')!.invalid && shippingForm.get('country')!.touched" class="text-red-500">
+          Country is required
+        </div>
+      </div>
+      <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-lg text-lg hover:bg-indigo-700">Continue</button>
+    </form>
+  </ng-container>
+  
+  <ng-container *ngIf="checkOut === 2">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Select Payment</h2>
+    <div class="mb-4">
+      <label class="block text-gray-700">Payment Method</label>
+      <div class="flex items-center">
+        <input type="radio" id="cash" name="paymentMethod" value="cash" [(ngModel)]="paymentMethod" class="mr-2">
+        <label for="cash" class="mr-4">Cash</label>
+        <input type="radio" id="online" name="paymentMethod" value="online" [(ngModel)]="paymentMethod" class="mr-2">
+        <label for="online">Online</label>
+      </div>
+    </div>
+    
+    <button *ngIf="paymentMethod === 'cash'" (click)="submitCashPayment()" class="w-full bg-indigo-600 text-white py-3 rounded-lg text-lg hover:bg-indigo-700">Confirm Cash Payment</button>
+    <button *ngIf="paymentMethod === 'online'" (click)="initiateRazorpayPayment()" class="w-full bg-indigo-600 text-white py-3 rounded-lg text-lg hover:bg-indigo-700">Pay with Razorpay</button>
+  </ng-container>
+</div>
