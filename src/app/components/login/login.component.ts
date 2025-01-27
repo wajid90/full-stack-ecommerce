@@ -7,6 +7,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatSnackBarModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule],
+    MatButtonModule, MatProgressSpinnerModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -26,6 +27,7 @@ export class LoginComponent {
   authService=inject(AuthService);
   router = inject(Router);
   snackBar = inject(MatSnackBar);
+  isLoading: boolean = false;
   loginForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -33,6 +35,7 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
+      this.isLoading = true;
       const value = this.loginForm.value;
       const email = value.email ?? '';
       const password = value.password ?? '';
@@ -45,17 +48,20 @@ export class LoginComponent {
             this.snackBar.open('Login successful', 'Close', {
               duration: 3000,
             });
+            this.isLoading = false;
             this.router.navigateByUrl("/");
           } else {
             this.snackBar.open(result.message, 'Close', {
               duration: 3000,
             });
+            this.isLoading = false;
           }
         },
         error: (error) => {
           this.snackBar.open('Error during login: ' + error.message, 'Close', {
             duration: 3000,
           });
+          this.isLoading = false;
         }
       });
     } else {

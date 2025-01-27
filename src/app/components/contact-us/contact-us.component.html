@@ -1,0 +1,31 @@
+<div class="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
+      <h2 class="text-2xl font-bold text-gray-800 text-center">Contact Us</h2>
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="Enter your name" required>
+          <mat-error *ngIf="contactForm.get('name')?.hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="Enter your email" required>
+          <mat-error *ngIf="contactForm.get('email')?.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="contactForm.get('email')?.hasError('email')">Invalid email address</mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Message</mat-label>
+          <textarea matInput formControlName="message" placeholder="Enter your message" required></textarea>
+          <mat-error *ngIf="contactForm.get('message')?.hasError('required')">Message is required</mat-error>
+          <mat-error *ngIf="contactForm.get('message')?.hasError('minlength')">Message must be at least 10 characters long</mat-error>
+        </mat-form-field>
+  
+        <button mat-raised-button color="primary" type="submit" class="w-full" [disabled]="isLoading">
+            <span *ngIf="!isLoading">Send Message</span>
+            <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+        </button>
+      </form>
+    </div>
+  </div>

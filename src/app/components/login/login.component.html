@@ -16,11 +16,17 @@
         <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 6 characters long</mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" type="submit" class="w-full">Login</button>
+      <button mat-raised-button color="primary" type="submit" class="w-full" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Login</span>
+        <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+      </button>
     </form>
     <p class="my-4  text-gray-600">
       Don't have an account? 
       <a [routerLink]="'/register'" class="text-blue-600 hover:underline">Register</a>
+    </p>
+    <p class="text-gray-600">
+      <a [routerLink]="'/forgot-password'" class="text-blue-600 hover:underline">Forgot Password?</a>
     </p>
   </div>
 </div>

@@ -1,44 +1,81 @@
 <div class="min-h-screen bg-gray-100 flex items-center justify-center">
-    <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
-      <!-- Profile Image -->
-      <div class="text-center">
-        <img
-          src="assets/profile.jpg"
-          alt="Profile Picture"
-          class="w-24 h-24 mx-auto rounded-full shadow-md border-4 border-gray-300"
-        />
-        <h2 class="text-2xl font-semibold text-gray-800 mt-4">{{ authService.userName }}</h2>
-        <p class="text-sm text-gray-600">{{ authService.userEmail }}</p>
-      </div>
-  
-      <!-- Buttons -->
-      <div class="mt-6">
-        <button
-          class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition"
-        >
-          Edit Profile
-        </button>
-      </div>
-      <div class="mt-6 grid grid-cols-2 gap-4">
-        <button
-          class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded transition"
-        >
-          My Orders
-        </button>
-        <button
-          class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded transition"
-        >
-          Settings
-        </button>
-      </div>
-      <div class="mt-6">
-        <button
+  <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
+    <!-- Profile Image -->
+    <div class="text-center">
+      <img
+        src="assets/profile.jpg"
+        alt="Profile Picture"
+        class="w-24 h-24 mx-auto rounded-full shadow-md border-4 border-gray-300"
+      />
+      <h2 class="text-2xl font-semibold text-gray-800 mt-4">{{ authService.userName }}</h2>
+      <p class="text-sm text-gray-600">{{ authService.userEmail }}</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="mt-6">
+      <button
+        class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition"
+      >
+        Edit Profile
+      </button>
+    </div>
+    <div class="mt-6 grid grid-cols-2 gap-4">
+      <button
+        class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded transition"
+      >
+        My Orders
+      </button>
+      <button
+        class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded transition"
+      >
+        Settings
+      </button>
+    </div>
+    <div class="mt-6">
+      <button
+        (click)="openChangePasswordForm()"
+        class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded transition"
+      >
+        Change Password
+      </button>
+    </div>
+    <div class="mt-6">
+      <button
         (click)="logout()"
-          class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition"
-        >
-          Log Out
-        </button>
-      </div>
+        class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition"
+      >
+        Log Out
+      </button>
     </div>
   </div>
-  
+</div>
+
+<!-- Change Password Form Modal -->
+<mat-dialog-content *ngIf="isChangePasswordFormVisible">
+  <form [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Current Password</mat-label>
+      <input matInput type="password" formControlName="currentPassword" required>
+      <mat-error *ngIf="changePasswordForm.get('currentPassword')?.hasError('required')">Current Password is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>New Password</mat-label>
+      <input matInput type="password" formControlName="newPassword" required>
+      <mat-error *ngIf="changePasswordForm.get('newPassword')?.hasError('required')">New Password is required</mat-error>
+      <mat-error *ngIf="changePasswordForm.get('newPassword')?.hasError('minlength')">Password must be at least 6 characters long</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Confirm New Password</mat-label>
+      <input matInput type="password" formControlName="confirmNewPassword" required>
+      <mat-error *ngIf="changePasswordForm.get('confirmNewPassword')?.hasError('required')">Confirm New Password is required</mat-error>
+      <mat-error *ngIf="changePasswordForm.get('confirmNewPassword')?.hasError('mustMatch')">Passwords must match</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" class="w-full" [disabled]="isLoading">
+      <span *ngIf="!isLoading">Change Password</span>
+      <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+    </button>
+  </form>
+</mat-dialog-content>

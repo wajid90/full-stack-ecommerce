@@ -18,6 +18,8 @@ import { WishListsComponent } from './components/wish-lists/wish-lists.component
 import { CartDetaileComponent } from './components/cart-detaile/cart-detaile.component';
 import { OrdersComponent as AdminOrderComponent } from './components/manage/orders/orders.component';
 import { OrdersComponent } from './components/orders/orders.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ContactUsComponent } from './components/contact-us/contact-us.component';
 
 export const routes: Routes = [
     {
@@ -98,6 +100,11 @@ export const routes: Routes = [
         path:"orders",
         component:OrdersComponent,
         canActivate:[authGaurd]
+    },   
+    {
+        path:"contact-us",
+        component:ContactUsComponent,
+        canActivate:[authGaurd]
     },
     {
         path:"register",
@@ -106,6 +113,10 @@ export const routes: Routes = [
     {
         path:"login",
         component:LoginComponent
+    },
+    {
+        path:"forgot-password",
+        component:ForgotPasswordComponent
     },
     {
         path:"admin/dashboard",

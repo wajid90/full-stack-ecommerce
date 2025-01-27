@@ -6,6 +6,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { WishListService } from './services/wish-list.service';
 import { CartDetaileService } from './services/cart-detaile.service';
 import { AuthService } from './services/auth.service';
+import { ChangePasswordDialogComponent } from './components/change-password-dialog/change-password-dialog.component';
 
 @Component({
   selector: 'app-root',
