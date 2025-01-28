@@ -1,0 +1,58 @@
+<div class="chat-container">
+    <header class="chat-header">
+      <a [routerLink]="'/'" class="logo-link">
+        <img src="assets/watchlogo.png" alt="TimeLux Logo" class="logo" />
+      </a>
+      <h2 class="title">Watch E-commerce Shop</h2>
+    </header>
+  
+    <div class="messages" #messageContainer>
+      <div
+  *ngFor="let msg of messages; trackBy: trackByMessageId"
+  [ngClass]="{
+    'message-sent': msg.sender && msg.sender._id === userId,
+    'message-received': msg.sender && msg.sender._id !== userId
+  }"
+  class="message-wrapper"
+>
+
+  @if (msg.sender && msg.sender._id !== authService.getUserId() && !(authService.isAdmin)) {
+    <img
+      src="assets/watchlogo.png"
+      alt="User Logo"
+      class="user-avatar"
+    />
+  }@else{
+    <img
+      src="assets/profile.jpg"
+      alt="User Logo"
+      class="user-avatar"
+    />
+  }
+  <div class="message">
+    <strong *ngIf="msg.sender" class="sender-name">
+      {{ msg.sender.name }}
+    </strong>
+    <p class="message-content">{{ msg.message }}</p>
+  </div>
+</div>
+
+    </div>
+  
+    <form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="chat-form">
+      <input
+        matInput
+        formControlName="message"
+        placeholder="Type a message"
+        class="input"
+      />
+      <button
+        mat-icon-button
+        type="submit"
+        class="send-button"
+        [disabled]="chatForm.invalid"
+      >
+        <mat-icon>send</mat-icon>
+      </button>
+    </form>
+  </div>

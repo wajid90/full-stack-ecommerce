@@ -20,6 +20,7 @@ import { OrdersComponent as AdminOrderComponent } from './components/manage/orde
 import { OrdersComponent } from './components/orders/orders.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 export const routes: Routes = [
     {
@@ -113,6 +114,9 @@ export const routes: Routes = [
     {
         path:"login",
         component:LoginComponent
+    },{
+        path:"chat",
+        component:ChatComponent
     },
     {
         path:"forgot-password",

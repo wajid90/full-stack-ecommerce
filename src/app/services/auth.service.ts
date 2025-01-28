@@ -8,10 +8,36 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
   http=inject(HttpClient);
-  constructor() { }
+  private userId: string;
+
+  constructor() {
+    const user = localStorage.getItem('user');
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      this.userId = parsedUser._id || 'defaultUserId';
+    } else {
+      this.userId = 'defaultUserId';
+    }
+  }
+
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(environment.apiUrl+"/auth/login", { email, password });
   }
+  getUserId(): string {
+    return this.userId;
+  }
+  getUser(): { _id: string, name: string } {
+    let user = localStorage.getItem('user');
+    if (user) {
+
+      return {
+        _id: JSON.parse(user)._id,
+        name: JSON.parse(user).name
+      };
+    }
+    return { _id: 'defaultUserId', name: 'Guest' };
+  }
+
   logout(): void {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
