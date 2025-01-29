@@ -58,6 +58,16 @@
             <mat-icon>favorite</mat-icon>
           </button>
         </ng-container>
+        <ng-container>
+          <a
+            
+            href="/chat"
+            class="text-white relative"
+          >
+            <mat-icon>notifications</mat-icon>
+            <span class="notification-count">{{ notificationCount }}</span>
+        </a>
+        </ng-container>
           <ng-container *ngIf="!authService.isAdmin">
           <button
             mat-icon-button
@@ -75,7 +85,7 @@
             Orders
           </a>
         </ng-container>
-          <ng-container>
+          <ng-container *ngIf="authService.isAdmin">
             <a
               href="/admin/dashboard"
               class="text-sm font-medium cursor-pointer text-white bg-blue-400 hover:bg-blue-300 px-4 py-2 rounded-md"

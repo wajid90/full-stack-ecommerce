@@ -21,9 +21,20 @@ export class SocketService {
   sendMessage(userId: string, room: string, message: string, receiverId: string, userName: string) {
     this.socket.emit('message', { userId, room, message, receiverId, userName });
   }
-
-  onMessage(callback: (data: { userId: string, userName: string, message: string }) => void) {
-    this.socket.on('message', callback);
+  getUsers(): Observable<any[]> {
+    return new Observable(observer => {
+      this.socket.emit('getUsers');
+      this.socket.on('users', (users) => {
+        observer.next(users);
+      });
+    });
+  }
+  onMessage(): Observable<any> {
+    return new Observable(observer => {
+      this.socket.on('message', (data) => {
+        observer.next(data);
+      });
+    });
   }
 
   disconnect() {

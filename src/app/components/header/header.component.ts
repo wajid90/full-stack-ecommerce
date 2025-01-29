@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
+import { SocketService } from '../../services/socket.service';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +24,20 @@ export class HeaderComponent {
   snackBar = inject(MatSnackBar);
   categoryList:Category[]=[];
   router=inject(Router);
+  notificationCount: number = 0;
+
+  constructor(private socketService: SocketService) {}
+
+  incrementNotificationCount(): void {
+    this.notificationCount++;
+  }
+
+  playNotificationSound(): void {
+    const audio = new Audio('assets/notification-ring.mp3');
+    audio.play();
+  }
+
+
   onSearch(e:any){
     if (!this.authService.isLoggedIn) {
       this.snackBar.open('Please log in to search data.', 'Close', {
@@ -51,6 +66,16 @@ export class HeaderComponent {
     });
   }
   ngOnInit() {
+    this.socketService.onMessage().subscribe((data: any) => {
+      console.log(data);
+      console.log(data.receiverId +"="+ this.authService.getUser()._id);
+      
+      if (data.receiverId === this.authService.getUser()._id) {
+        this.incrementNotificationCount();
+        this.playNotificationSound();
+      }
+    });
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {

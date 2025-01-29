@@ -1,0 +1,23 @@
+<div class="sidebar">
+    <div class="sidebar-header">
+      <h3>Users</h3>
+      <input type="text" placeholder="Search users..." class="search-box" [(ngModel)]="searchQuery" />
+    </div>
+  
+    <ul class="user-list">
+      <li 
+        *ngFor="let user of filteredUsers()" 
+        (click)="selectUser(user)" 
+        [class.active]="user._id === selectedUser?._id"
+        class="user-item">
+        
+        <img [src]="user.avatar || 'assets/watchBanner1.jpg'" alt="User Avatar" class="avatar" />
+        
+        <div class="user-info">
+          <span class="username">{{ user.name }}</span>
+          <span class="status">{{ user.status || 'Online' }}</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
