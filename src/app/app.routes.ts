@@ -21,6 +21,7 @@ import { OrdersComponent } from './components/orders/orders.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 
 export const routes: Routes = [
     {
@@ -110,6 +111,10 @@ export const routes: Routes = [
     {
         path:"register",
         component:RegisterComponent
+    }, { 
+        path: 'edit-profile',
+         component: EditProfileComponent,
+         canActivate:[authGaurd] 
     },
     {
         path:"login",

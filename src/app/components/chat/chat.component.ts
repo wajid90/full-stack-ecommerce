@@ -144,13 +144,13 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.socketService.sendMessage(this.userId, this.room, message, this.selectedUser?._id, this.userName);
       }
 
-      const newMessage = {
-        sender: { _id: this.userId, name: this.userName },
-        receiver: { _id: receiverId, name: receiverName },
-        message: message,
-        room: this.room
-      };
-      this.messages.push(newMessage);
+      // const newMessage = {
+      //   sender: { _id: this.userId, name: this.userName },
+      //   receiver: { _id: receiverId, name: receiverName },
+      //   message: message,
+      //   room: this.room
+      // };
+      // this.messages.push(newMessage);
       this.chatForm.reset();
       this.scrollToBottom();
       this.cdr.detectChanges();

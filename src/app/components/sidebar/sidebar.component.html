@@ -11,7 +11,7 @@
         [class.active]="user._id === selectedUser?._id"
         class="user-item">
         
-        <img [src]="user.avatar || 'assets/watchBanner1.jpg'" alt="User Avatar" class="avatar" />
+        <img [src]="user.profileImage ? 'http://localhost:3000' + user.profileImage : 'assets/watchBanner1.jpg'" alt="User Avatar" class="avatar" />
         
         <div class="user-info">
           <span class="username">{{ user.name }}</span>

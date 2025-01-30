@@ -3,7 +3,7 @@
     <!-- Profile Image -->
     <div class="text-center">
       <img
-        src="assets/profile.jpg"
+      [src]="authService.userProfileImage || 'assets/profile.jpg'"
         alt="Profile Picture"
         class="w-24 h-24 mx-auto rounded-full shadow-md border-4 border-gray-300"
       />
@@ -13,11 +13,14 @@
 
     <!-- Buttons -->
     <div class="mt-6">
-      <button
-        class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition"
-      >
-        Edit Profile
-      </button>
+      <div class="mt-6">
+        <button
+          class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition"
+          (click)="editProfile()"
+        >
+          Edit Profile
+        </button>
+      </div>
     </div>
     <div class="mt-6 grid grid-cols-2 gap-4">
       <button

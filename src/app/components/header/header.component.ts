@@ -33,7 +33,7 @@ export class HeaderComponent {
   }
 
   playNotificationSound(): void {
-    const audio = new Audio('assets/notification-ring.mp3');
+    const audio = new Audio('assets/whatsApp.mp3');
     audio.play();
   }
 

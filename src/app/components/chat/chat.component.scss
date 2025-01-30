@@ -1,5 +1,5 @@
 // Light Theme Colors
-$primary-color: #25d366; // WhatsApp Green
+$primary-color: #075e54; // WhatsApp Green
 $secondary-color: #ffffff;
 $chat-bg: #f0f2f5;
 $incoming-bg: #ffffff;
@@ -30,7 +30,10 @@ $border-color: #e0e0e0;
 .chat-container {
   width: 100%;
   height: 100vh;
-  background: $chat-bg;
+  background-image: url('../../../assets/whatsapp-image.png'); // Path to your background image
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
   color: $text-dark;

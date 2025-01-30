@@ -9,12 +9,13 @@ import { Observable } from 'rxjs';
 export class AuthService {
   http=inject(HttpClient);
   private userId: string;
-
+  public userProfileImage: string='';
   constructor() {
     const user = localStorage.getItem('user');
     if (user) {
       const parsedUser = JSON.parse(user);
       this.userId = parsedUser._id || 'defaultUserId';
+      this.userProfileImage = environment.imgUrl + parsedUser.profileImage || '';
     } else {
       this.userId = 'defaultUserId';
     }
@@ -99,5 +100,8 @@ export class AuthService {
   contactUs(data: { name: string, email: string, password: string }): Observable<any> {
     
     return this.http.post<any>(environment.apiUrl + "/contact/add", data);
+  }
+  editProfile(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/auth/profile`, formData);
   }
 }

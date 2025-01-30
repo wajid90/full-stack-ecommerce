@@ -68,7 +68,9 @@ export class CustomerProfileComponent {
       }
     };
   }
-
+  editProfile(): void {
+    this.router.navigate(['/edit-profile']);
+  }
   changePassword() {
     if (this.changePasswordForm.valid) {
       this.isLoading = true;
