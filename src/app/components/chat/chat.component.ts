@@ -6,6 +6,7 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
+  inject,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -20,6 +21,7 @@ import { SocketService } from '../../services/socket.service';
 import { MessagesComponent } from '../messages/messages.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-chat',
@@ -37,7 +39,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   selectedUser: any=null;
   users: any[] = [];
   private subscriptions: Subscription = new Subscription();
-
+  isBlocked: boolean = false; 
+  snackBar = inject(MatSnackBar);
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
 
   constructor(
@@ -66,6 +69,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
   onUserSelected(user: any): void {
     this.selectedUser = user;
+    this.isBlocked=false;
     this.room = this.createRoomId(this.userId, user._id);
     this.initializeChat();
   }
@@ -130,10 +134,20 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       })
     );
+     this.subscriptions.add(
+      this.socketService.onBlocked().subscribe((data: any) => {
+        console.log(data);
+        this.isBlocked = true;
+        this.snackBar.open(data.message, 'Close', {
+          duration: 3000,
+        });
+        return;
+      })
+    );
   }
 
   sendMessage(): void {
-    if (this.chatForm.valid) {
+    if (this.chatForm.valid && !this.isBlocked) {
       const message = this.chatForm.get('message')?.value;
       const receiverName = this.selectedUser ? this.selectedUser.name : 'wajid';
       const receiverId = this.selectedUser ? this.selectedUser._id : '678ba115130d3640b1cf1b1f';
@@ -144,13 +158,6 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.socketService.sendMessage(this.userId, this.room, message, this.selectedUser?._id, this.userName);
       }
 
-      // const newMessage = {
-      //   sender: { _id: this.userId, name: this.userName },
-      //   receiver: { _id: receiverId, name: receiverName },
-      //   message: message,
-      //   room: this.room
-      // };
-      // this.messages.push(newMessage);
       this.chatForm.reset();
       this.scrollToBottom();
       this.cdr.detectChanges();

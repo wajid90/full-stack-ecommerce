@@ -67,8 +67,6 @@ export class HeaderComponent {
   }
   ngOnInit() {
     this.socketService.onMessage().subscribe((data: any) => {
-      console.log(data);
-      console.log(data.receiverId +"="+ this.authService.getUser()._id);
       
       if (data.receiverId === this.authService.getUser()._id) {
         this.incrementNotificationCount();

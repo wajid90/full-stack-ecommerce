@@ -13,7 +13,12 @@
         *ngFor="let msg of messages; trackBy: trackByMessageId"
         [msg]="msg"
         [userId]="userId"
+        [selectedUser]="selectedUser"
       ></app-messages>
+      <div *ngIf="isBlocked" class="blocked-message">
+        <p><strong>Notice:</strong> You have been blocked from sending messages.</p>
+        <p>If you believe this is a mistake, please contact support for further assistance.</p>
+      </div>
     </div>
   </div>
 
@@ -23,12 +28,14 @@
       formControlName="message"
       placeholder="Type a message"
       class="input"
+      [disabled]="isBlocked"
+      [readonly]="isBlocked"
     />
     <button
       mat-icon-button
       type="submit"
       class="send-button"
-      [disabled]="chatForm.invalid"
+      [disabled]="chatForm.invalid || isBlocked"
     >
       <mat-icon>send</mat-icon>
     </button>

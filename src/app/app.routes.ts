@@ -22,6 +22,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { UserListComponent } from './components/manage/user-list/user-list.component';
 
 export const routes: Routes = [
     {
@@ -47,6 +48,11 @@ export const routes: Routes = [
     {
         path:"admin/orders",
         component:AdminOrderComponent,
+        canActivate:[adminGaurd]
+    },
+    {
+        path:"admin/users",
+        component:UserListComponent,
         canActivate:[adminGaurd]
     },
     {

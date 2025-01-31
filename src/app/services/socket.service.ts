@@ -43,4 +43,12 @@ export class SocketService {
   getChatHistory(room: string): Observable<any> {
     return this.http.get(`${environment.apiUrl}/history/${room}`);
   }
+  onBlocked(): Observable<any> {
+    return new Observable(observer => {
+      this.socket.on('blocked', (data) => {
+        observer.next(data);
+      });
+    });
+  }
+
 }

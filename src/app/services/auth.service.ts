@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
   http=inject(HttpClient);
-  private userId: string;
+  public userId: string;
   public userProfileImage: string='';
   constructor() {
     const user = localStorage.getItem('user');
@@ -79,6 +79,9 @@ export class AuthService {
     }
     return null;
   }
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/auth`);
+  }
   refreshToken(token: string): Observable<any> {
     return this.http.post<any>(environment.apiUrl+"/auth/refresh-token", { token });
   }
@@ -103,5 +106,15 @@ export class AuthService {
   }
   editProfile(formData: FormData): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/auth/profile`, formData);
+  }
+  getUserById(userId: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/auth/${userId}`);
+  }
+  blockUser(userId: string): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/auth/block/${userId}`, {});
+  }
+
+  unblockUser(userId: string): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/auth/unblock/${userId}`, {});
   }
 }

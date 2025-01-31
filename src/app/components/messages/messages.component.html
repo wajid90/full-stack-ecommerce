@@ -5,52 +5,74 @@
   }"
   class="message-wrapper"
 >
-@if(msg.sender || msg.receiver){
-@if(msg.sender && msg.sender._id === authService.getUserId()) {
-    @if((authService.isAdmin)){
-        <img
-        src="assets/watchlogo.png"
-        alt="User Logo"
-        class="user-avatar"
-      />
-    }@else{
-        <img
-        src="assets/profile.jpg"
-        alt="User Logo"
-        class="user-avatar"
-      />
-    }
-    
-  }@else if(msg.receiver && msg.receiver._id === authService.getUserId()){
-    @if((authService.isAdmin)){
-        <img
-        src="assets/profile.jpg"
-        alt="User Logo"
-        class="user-avatar"
-      />
-     
-    }@else{
-         <img
-        src="assets/watchlogo.png"
-        alt="User Logo"
-        class="user-avatar"
-      />
-    }
+
+@if(msg.sender && msg.receiver ){
+
+  @if(selectedUser!=null && selectedUser!=undefined){
+  @if(msg.receiver._id===selectedUser._id && msg.sender._id === authService.userId){
+    <img
+    [src]="authService.userProfileImage ?  authService.userProfileImage : 'assets/watchBanner1.jpg'" 
+   alt="User Logo"
+   class="user-avatar"
+ />
+   
+  }@else if(msg.sender._id===selectedUser._id && msg.receiver._id === authService.userId){
+    <img
+    [src]="selectedUser.profileImage ? 'http://localhost:3000' + selectedUser.profileImage : 'assets/watchBanner1.jpg'" 
+    alt="User Logo"
+    class="user-avatar"
+  />
+  }
+  @else if(msg.receiver._id===selectedUser._id && msg.sender._id === authService.userId){
+    <img
+    [src]="selectedUser.profileImage ? 'http://localhost:3000' + selectedUser.profileImage : 'assets/watchBanner1.jpg'" 
+    alt="User Logo"
+    class="user-avatar"
+  />
+   
+  }@else if(msg.sender._id===selectedUser._id && msg.receiver._id === authService.userId){
+    <img
+    [src]="authService.userProfileImage ?  authService.userProfileImage : 'assets/watchBanner1.jpg'" 
+   alt="User Logo"
+   class="user-avatar"
+ />
+   
+  }
+ 
   }@else{
-    @if((authService.isAdmin)){
-        <img
-        src="assets/profile.jpg"
-        alt="User Logo"
-        class="user-avatar"
-      />
+    @if(user){
+    @if(msg.receiver._id==="678ba115130d3640b1cf1b1f" && msg.sender._id === authService.userId){
+      <img
+      [src]="authService.userProfileImage ?  authService.userProfileImage : 'assets/watchBanner1.jpg'" 
+    
+      alt="User Logo"
+      class="user-avatar"
+    />
+      
      
-    }@else{
-         <img
-        src="assets/watchlogo.png"
-        alt="User Logo"
-        class="user-avatar"
-      />
+    }@else if(msg.sender._id==="678ba115130d3640b1cf1b1f" && msg.receiver._id === authService.userId){
+      <img
+      [src]="user.profileImage ? 'http://localhost:3000' + user.profileImage : 'assets/watchBanner1.jpg'" 
+     alt="User Logo"
+     class="user-avatar"
+   />
     }
+    @else if(msg.receiver._id==="678ba115130d3640b1cf1b1f" && msg.sender._id === authService.userId){
+      <img
+      [src]="authService.userProfileImage ?  authService.userProfileImage : 'assets/watchBanner1.jpg'" 
+     alt="User Logo"
+     class="user-avatar"
+   />
+     
+    }@else if(msg.sender._id==="678ba115130d3640b1cf1b1f" && msg.receiver._id === authService.userId){
+     
+   <img
+   [src]="user.profileImage ? 'http://localhost:3000' + user.profileImage : 'assets/watchBanner1.jpg'" 
+   alt="User Logo"
+   class="user-avatar"
+ />
+    }
+  }
   }
   <div class="message">
     <strong *ngIf="msg.sender" class="sender-name">

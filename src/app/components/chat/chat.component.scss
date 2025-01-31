@@ -78,6 +78,25 @@ $border-color: #e0e0e0;
     padding: 16px;
     overflow-y: auto;
     @include custom-scrollbar;
+    .blocked-message {
+      color: #d9534f;
+      font-size: 1rem;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #d9534f;
+      border-radius: 5px;
+      background-color: #f2dede;
+      text-align: center;
+
+      p {
+        margin: 0;
+        padding: 5px 0;
+      }
+
+      strong {
+        font-weight: bold;
+      }
+    }
   }
 }
 
